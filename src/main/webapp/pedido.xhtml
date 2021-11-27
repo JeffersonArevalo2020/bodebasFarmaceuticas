@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta charset="UTF-8" />
+	<title>PedidoProductos</title>
+</h:head>
+<h:body>
+		<ui:composition template="/principal.xhtml">
+		<ui:define name="content">
+		<h:form id = "frmpedido">
+	<p:growl id="growl" showDetail="true" skipDetailIfEqualsSumary="true"/>
+		<p:growl id="messages" showDetail="true" />
+	
+		<p:panel id="ingresoPedido" header="REGISTRO DE INGRESOS PEDIDOS"
+			style="margin-bottom:20px">
+			
+				<div class="ui-g-12">
+				<p:staticMessage severity="error" sumary="Info!" detail="campos con(*) son obligatorios" style="width:100%"/> 
+			</div>
+			
+			<h:panelGrid columns="2">
+				
+						
+							
+				<p:outputLabel value ="Nombre" for="@next"></p:outputLabel>
+				<p:inputText value="#{pedidoVista.nombrePedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+				
+				<p:outputLabel>Pedido</p:outputLabel>
+						<p:selectOneMenu id="option"
+						
+							value="#{pedidoVista.productoSeleccionado}">
+							<f:selectItem itemLabel="Seleccionar Producto" itemValue="" />
+							<f:selectItems var="productoselect"
+								value="#{pedidoVista.listaProducto}"
+								itemLabel="#{productoselect.nombreProducto} #{productoselect.precio}"
+
+						itemValue="#{productoselect.idproducto}" />
+						</p:selectOneMenu>
+								
+                 
+			<p:outputLabel value ="Fecha del Pedido" for="@next"></p:outputLabel>
+          <p:datePicker value="#{pedidoVista.fechaPedido}" showIcon="true"/>
+	
+				<p:outputLabel value ="Fecha de Envio" for="@next"></p:outputLabel>
+				<p:datePicker value="#{pedidoVista.fechaEnvio}" showIcon="true"/>
+
+				<p:outputLabel value ="Cantidad de Pedido" for="@next"></p:outputLabel>
+				<p:inputText value="#{pedidoVista.cantidadPedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+				
+				<p:outputLabel value ="Ingreso de Pedidos" for="@next"></p:outputLabel>
+				<p:inputText value="#{pedidoVista.ingresoPedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+				
+				<p:outputLabel value ="Detalle de Pedidos" for="@next"></p:outputLabel>
+				<p:inputText value="#{pedidoVista.detallePedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+				
+				<p:outputLabel value ="Reclamos" for="@next"></p:outputLabel>
+				<p:inputText value="#{pedidoVista.reclamoPedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+			
+		
+			
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			<p:commandButton value="Guardar" update="growl dt-pedido frmpedido"
+				    action="#{pedidoVista.insertarPedido}">
+				    </p:commandButton> <p:commandButton value="Export" icon="pi pi-upload"
+								styleClass="ui-button-help" ajax="false">
+								<p:dataExporter type="xlsx"  target="dt-pedido"
+									fileName="pedido" />
+							</p:commandButton>		    
+			</h:panelGrid>
+		</p:panel>
+	
+		
+		
+			
+<p:dataTable id="dt-pedido" widgetVar="dt-pedido" var="Ped" value="#{pedidoVista.listaPedido}"
+                     reflow="true" styleClass="pedido-table"
+                     selection="#{pedidoVista.selectedPedido}" rowKey="#{pedido.id}" paginator="true"
+                     rows="3" rowSelectMode="add" paginatorPosition="bottom">
+            <f:facet name="header">
+                <div class="pedido-table-header">
+                    <span style="font-weight: bold">PEDIDO</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dt-pedido').filter()" placeholder="buscar"/>
+                    </span>
+
+                </div>
+            </f:facet>
+		
+		
+			
+						
+			<p:column headerText="id">
+				<h:outputText value="#{Ped.idpedido}" />
+			</p:column>
+
+	<p:column headerText="Cliente" filterBy="#{Ped.nombrePedido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Ped.nombrePedido}" />
+			</p:column>
+			
+			<p:column headerText="Nombre Producto" filterBy="#{Ped.fkProducto.nombreProducto}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Ped.fkProducto.nombreProducto}" />
+			</p:column>	
+			
+			<p:column headerText="Detalle Producto" filterBy="#{Ped.detallePedido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Ped.detallePedido}" />
+			</p:column>
+			
+
+			
+			<p:column headerText="Cantidad de Pedido" filterBy="#{Ped.cantidadPedido}"
+			filterStyle="diplay: none"> 
+				<h:outputText value="#{Ped.cantidadPedido}" />
+			</p:column>
+			
+			
+			<p:column headerText="Ingreso Pedido" filterBy="#{Ped.ingresoPedido}"
+			filterStyle="diplay: none"> 
+				<h:outputText value="#{Ped.ingresoPedido}" />
+			</p:column> 
+			
+		
+			
+				<p:column headerText="Fecha Pedido" sortBy="#{Ped.fechaPedido}" filterBy="#{Ped.fechaPedido}">
+				<h:outputText value="#{Ped.fechaPedido}" >
+			<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>		
+			
+			<p:column headerText="Fecha Envio" sortBy="#{Ped.fechaEnvio}" filterBy="#{Ped.fechaEnvio}">
+				<h:outputText value="#{Ped.fechaEnvio}" >
+			<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>		
+
+			<p:column headerText="detalle Pedido" filterBy="#{Ped.detallePedido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Ped.detallePedido}" />
+			</p:column> 
+			
+
+			<p:column headerText="Reclamos" filterBy="#{Ped.reclamoPedido}"
+			filterStyle="diplay: none">   
+						<h:outputText value="#{Ped.reclamoPedido}" />
+					</p:column>
+	
+	
+	<p:column exportable="false">
+	<p:commandButton value="eliminar" icon="pi pi-check" update="frmpedido:dt-pedido" actionListener="#{pedidoVista.deleteProduct(Ped.idpedido)}">      
+           </p:commandButton>
+                </p:column>	
+	
+	<p:column exportable="false">
+	
+	
+	 <!-- aumento de codigo  -->
+	 
+		  <p:commandButton icon="pi pi-pencil" update=":frmpedido:productDetail"
+                                 oncomplete="PF('productDialog').show()"
+                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                    <f:setPropertyActionListener value="#{Ped}" target="#{pedidoVista.selectedPedido}"/>                    
+                </p:commandButton>      
+	           </p:column>	
+       
+        <!-- aumento de codigo  -->
+
+	<!-- no hay como hacer por las relaciones 
+<p:column exportable="false">
+         <p:commandButton value="SI" icon="pi pi-check" update="frmpedido:dt-pedido" actionListener="#{pedidoVista.deleteProduct(Ped.idpedido)}">      
+           </p:commandButton>
+                </p:column>	-->
+	
+		</p:dataTable>
+		
+		         <!-- aumento de codigo  -->
+		
+		  
+        <p:dialog header="Pedido" widgetVar="productDialog" modal="false">
+        <p:outputPanel id="productDetail" style="text-align:center;">
+               <p:column rendered="#{not empty pedidoVista.selectedPedido}">
+                <div class="product">
+                    <div class="product-grid-item card" style="margin-bottom: 0">
+                        <div class="product-grid-item-top">
+                        <p:panel>
+			                <h:panelGrid columns="4" columnClasses="p-col-12 p-md-3 p-xl-2">
+               
+                <!-- aumento de caMPOS NOMBRE ID ETC ETC  -->
+                 
+		   
+		       <p:outputLabel value="iD Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.idpedido}"/>
+             
+		    <p:outputLabel value="Nombre Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.nombrePedido}"/>
+             
+            <p:outputLabel value="Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.idpedido}"/>
+                            
+            <p:outputLabel value="Fecha del Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.fechaPedido}"/>   
+                            
+           <p:outputLabel value="Fecha de Envio"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.fechaEnvio}"/> 
+                            
+            <p:outputLabel value="Cantidad de Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.cantidadPedido}"/>
+		
+		    <p:outputLabel value="Ingreso de Pedidos"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.cantidadPedido}"/>
+              
+                <p:outputLabel value="Detalle de Pedido"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.detallePedido}"/>
+				   
+				    <p:outputLabel value="Reclamos"></p:outputLabel>  
+                            <p:inputText value="#{pedidoVista.selectedPedido.reclamoPedido}"/>
+		
+		       
+                            <p:commandButton value="resumen detalle" update="growl dt-pedido frmpedido"
+                   action="#{compraVista.actualizarCompra(compraVista.selectedCompra.idCompra,compraVista.selectedCompra.compraproductos, compraVista.selectedCompra.detallePedido, compraVista.selectedCompra.cantidadPedido)}">
+				                 </p:commandButton>    
+                            
+                               </h:panelGrid>
+                               </p:panel>                                                   
+                           </div>               
+                        </div>
+                    </div>                
+            </p:column>
+        </p:outputPanel>
+    </p:dialog>    	    		       
+        
+      <!-- aumento de codigo  -->   
+        
+	</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

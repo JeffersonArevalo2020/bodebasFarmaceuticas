@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+<meta charset="UTF-8" />
+	<title>Proveedor</title>
+</h:head>
+<h:body>
+		<ui:composition template="/principal.xhtml">
+		<ui:define name="content">
+	<h:form id = "frmproveedor">
+	<p:growl id="growl" showDetail="true" />
+	<p:growl id="messages" showDetail="true" />
+	
+		<p:panel id="ingresoproveedor" header="INGRESO INFORMACION PROVEEDOR"
+			style="margin-bottom:20px">
+			<div class="ui-g-12">
+				<p:staticMessage severity="error" sumary="Info!" detail="campos con(*) son obligatorios" style="width:100%"/> 
+			</div>
+			
+			
+			<h:panelGrid columns="2">
+						
+				<p:outputLabel value = "Nombre" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.nombre}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value = "Apellido" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.apellido}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value = "Edad" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.edad}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+					<p:outputLabel value ="Genero" for="@next"></p:outputLabel>	
+				<p:selectOneRadio id="console" value="#{proveedorVista.genero}" unselectable="true">
+            <f:selectItem itemLabel="Masculino" itemValue="Masculino"/>
+            <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
+            <p:inputText value="#{proveedorVista.genero}" required="true" requiredMessage="campo vacio"></p:inputText>
+         </p:selectOneRadio>
+				
+				<p:outputLabel value = "Email" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.email}" required="true" requiredMessage="campo vacio"></p:inputText>
+		
+				<p:outputLabel value = "Intitucion Proveniente" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.institucion}" required="true" requiredMessage="campo vacio"></p:inputText>
+		
+				<p:outputLabel value = "Doc. Identificación" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.documentoIdentificacion}" required="true" requiredMessage="campo vacio"></p:inputText>
+		
+				<p:outputLabel value = "telefono" for="@next"></p:outputLabel>
+				<p:inputText value="#{proveedorVista.telefono}" required="true" requiredMessage="campo vacio"></p:inputText>
+		
+			
+           	<p:outputLabel value ="estado" for="@next"></p:outputLabel>	
+                <p:selectOneMenu id="option" value="#{proveedorVista.estado}">
+             <f:selectItem itemLabel="proveedor puntual" itemValue="proveedor puntual"/>
+                    <f:selectItem itemLabel="proveedor impuntual" itemValue="proveedor impuntual"/>
+       		<p:inputText value="#{proveedorVista.estado}" required="true" requiredMessage="campo vacio"></p:inputText>
+                  </p:selectOneMenu>
+        	
+		</h:panelGrid>
+			<h:panelGrid columns="2">
+			<p:commandButton value="Guardar" update="growl dt-proveedor frmproveedor"
+				    action="#{proveedorVista.insertarProveedor}">
+				    </p:commandButton> <p:commandButton value="Export" icon="pi pi-upload"
+								styleClass="ui-button-help" ajax="false">
+								<p:dataExporter type="xlsx"  target="dt-proveedor"
+									fileName="proveedor" />
+	
+	
+	 <p:commandButton value="Print" type="button" icon="pi pi-print" styleClass="p-d-block p-shadow-2 p-mb-3">
+        <p:printer  type="xlsx"  fileName="proveedor" />
+    </p:commandButton>
+	<p:graphicImage id="xlsx" name="proveedor.jpg"/>
+
+	
+	
+ </p:commandButton>
+				<!-- <p:commandButton value="Cancelar"</p:commandButton>  -->
+			</h:panelGrid>
+		</p:panel>
+		
+			
+
+		 <p:dataTable id="dt-proveedor" widgetVar="dt-proveedor" var="Pro" value="#{proveedorVista.listaProveedor}"
+                     reflow="true" styleClass="proveedor-table"
+                     selection="#{proveedorVista.selectedProveedor}" rowKey="#{proveedor.id}" paginator="true"
+                     rows="3" rowSelectMode="add" paginatorPosition="bottom">
+            <f:facet name="header">
+                <div class="proveedor-table-header">
+                    <span style="font-weight: bold">PROVEEDORES</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dt-proveedor').filter()" placeholder="buscar"/>
+                    </span>
+
+                </div>
+            </f:facet>
+	
+            
+	
+			
+
+			<p:column headerText="Id" >
+				<h:outputText value="#{Pro.idproveedor}" />
+			</p:column>
+
+			<p:column headerText="Nombre" filterBy="#{Pro.nombre}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Pro.nombre}" />
+			</p:column>
+
+			<p:column headerText="Apellido" filterBy="#{Pro.apellido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Pro.apellido}" />
+			</p:column>
+
+			<p:column headerText="Edad" filterBy="#{Pro.edad}"
+			filterStyle="diplay: none">  
+				<h:outputText value="#{Pro.edad}" />
+			</p:column>
+
+			<p:column headerText="Genero" filterBy="#{Pro.genero}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.genero}" />
+			</p:column>
+
+			<p:column headerText="Email" filterBy="#{Pro.email}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.email}" />
+			</p:column>
+			
+			<p:column headerText="Doc Identificacion" filterBy="#{Pro.documentoIdentificacion}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.documentoIdentificacion}" />
+			</p:column>
+			
+			<p:column headerText="estado" filterBy="#{Pro.estado}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.estado}" />
+			</p:column>
+			
+				<p:column headerText="Institucion" filterBy="#{Pro.institucion}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.institucion}" />
+			</p:column>
+	
+			
+			<p:column headerText="telefono" filterBy="#{Pro.telefono}"
+			filterStyle="diplay: none">
+				<h:outputText value="#{Pro.telefono}" />
+			</p:column>
+	
+	        
+			
+	<p:column exportable="false">
+         <p:commandButton value="eliminar" icon="pi pi-check" update="frmproveedor:dt-proveedor" actionListener="#{proveedorVista.deleteProduct(Pro.idproveedor)}">      
+           </p:commandButton>
+                </p:column>	
+                
+             
+          <p:column exportable="false">
+	
+	
+	 <!-- aumento de codigo  -->
+	 
+
+		  <p:commandButton icon="pi pi-pencil" 
+		   update="frmproveedor:dt-proveedor"
+           oncomplete="PF('proveedorDialog').show()"
+           style="margin-right: 5Ppx"
+           process="@this">
+            <f:setPropertyActionListener value="#{Pro}"
+             target="#{proveedorVista.selectedProveedor}" />      
+              </p:commandButton>          
+                 </p:column>	
+                
+               
+	           
+       
+        <!-- aumento de codigo  -->
+        
+			</p:dataTable>
+		
+         <!-- aumento de codigo  -->
+         
+	  <p:dialog header="Proveedor" widgetVar="productDialog" modal="false">
+        <p:outputPanel id="productDetail" style="text-align:center;">
+               <p:column rendered="#{not empty proveedorVista.selectedProveedor}">
+                <div class="product">
+                    <div class="product-grid-item card" style="margin-bottom: 0">
+                        <div class="product-grid-item-top">
+                        <p:panel>
+			                <h:panelGrid columns="4" columnClasses="p-col-12 p-md-3 p-xl-2">
+               
+                <!-- aumento de caMPOS NOMBRE ID ETC ETC  -->
+                 
+       <p:outputLabel value="id"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.idproveedor}"
+                            required="true" />                
+                   
+       <p:outputLabel value="Nombre"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.nombre}"
+                            required="true" />                
+                            
+      <p:outputLabel value="Apellido"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.apellido}"
+                            required="true" />                
+                            
+      <p:outputLabel value="Edad"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.edad}"
+                            required="true" />                
+                            
+      <p:outputLabel value="Genero"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.genero}"
+                            required="true" />                
+                            
+      <p:outputLabel value="Doc Identificacion"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.documentoIdentificacion}"
+                            required="true" />                
+                            
+      <p:outputLabel value="estado"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.estado}"
+                            required="true" />              
+                            
+       <p:outputLabel value="Institucion"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.institucion}"
+                            required="true" />                               
+      
+       <p:outputLabel value="telefono"></p:outputLabel>  
+                            <p:inputText value="#{proveedorVista.selectedProveedor.telefono}"
+                            required="true" />                
+                           
+                               
+                              
+                              
+                               </h:panelGrid>
+                               </p:panel>                                                   
+                           </div>               
+                        </div>
+                    </div>                
+            </p:column>
+        </p:outputPanel>
+    </p:dialog>    	    		       
+        
+      <!-- aumento de codigo  -->   
+        
+
+	</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

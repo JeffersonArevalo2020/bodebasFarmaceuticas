@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta charset="UTF-8" />
+	<title>PersonalVozandes</title>
+</h:head>
+<h:body>
+		<ui:composition template="/principal.xhtml">
+		<ui:define name="content">
+			<h:form id = "frmpersonal">
+			<p:growl id="growl" showDetail="true" />
+	<p:growl id="messages" showDetail="true" />
+	
+		<p:panel id="ingresopersonal" header="INGRESO DE PERSONAL ENCARGADO"
+			style="margin-bottom:20px">
+			<div class="ui-g-12">
+				<p:staticMessage severity="error" sumary="Info!" detail="campos con(*) son obligatorios" style="width:100%"/> 
+			</div>
+			
+			
+			<h:panelGrid columns="2">
+				
+				<p:outputLabel value ="Nombre" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.nombre}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="Apellido" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.apellido}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="Edad" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.edad}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="Genero" for="@next"></p:outputLabel>	
+				<p:selectOneRadio id="console" value="#{personalVista.genero}" unselectable="true">
+            <f:selectItem itemLabel="Masculino" itemValue="Masculino"/>
+            <f:selectItem itemLabel="Femenino" itemValue="Femenino"/>
+        </p:selectOneRadio>
+				
+				<p:outputLabel value ="telefono" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.telefono}" required="true" requiredMessage="campo vacio"></p:inputText>
+									
+				<p:outputLabel value ="Cedula" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.cedula}" required="true" requiredMessage="campo vacio"></p:inputText>
+					
+				<p:outputLabel value ="Cargo" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.cargo}" required="true" requiredMessage="campo vacio"></p:inputText>
+				
+				<p:outputLabel value ="Correo" for="@next"></p:outputLabel>
+				<p:inputText value="#{personalVista.correo}" required="true" requiredMessage="campo vacio"></p:inputText>
+	
+				
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+			<p:commandButton value="Guardar" update="growl dt-personal frmpersonal"
+				    action="#{personalVista.insertarPersonal}">
+				    </p:commandButton> <p:commandButton value="Export" icon="pi pi-upload"
+								styleClass="ui-button-help" ajax="false">
+								<p:dataExporter type="xlsx"  target="dt-personal"
+									fileName="personal" />
+							</p:commandButton>	
+							
+						
+			
+				<!-- <p:commandButton value="Cancelar"></p:commandButton>  -->	    
+			</h:panelGrid>
+		</p:panel>
+	
+		
+	
+	
+	 <p:dataTable id="dt-personal" widgetVar="dt-personal" var="Per" value="#{personalVista.listaPersonal}"
+                     reflow="true" styleClass="personal-table"
+                     selection="#{personalVista.selectedPersonal}" rowKey="#{personal.id}" paginator="true"
+                     rows="3" rowSelectMode="add" paginatorPosition="bottom">
+            <f:facet name="header">
+                <div class="personal-table-header">
+                    <span style="font-weight: bold">Personal</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dt-personal').filter()" placeholder="buscar"/>
+                    </span>
+
+                </div>
+            </f:facet>
+			
+			
+		
+
+				<p:column headerText="Id">
+				<h:outputText value="#{Per.idPersonal}" />
+			</p:column>
+			
+			<p:column headerText="Nombre" filterBy="#{Per.nombre}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.nombre}" />
+			</p:column>
+
+			<p:column headerText="Apellido" filterBy="#{Per.apellido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.apellido}" />
+			</p:column>
+
+			<p:column headerText="Edad" filterBy="#{Per.edad}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.edad}" />
+			</p:column>
+
+			<p:column headerText="Genero" filterBy="#{Per.genero}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.genero}" />
+			</p:column>
+
+		<p:column headerText="Telefono" filterBy="#{Per.telefono}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.telefono}" />
+			</p:column>
+			
+						<p:column headerText="cedula" filterBy="#{Per.cedula}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.cedula}" />
+				</p:column>		
+			
+			<p:column headerText="cargo" filterBy="#{Per.cargo}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.cargo}" />
+				</p:column>
+				
+				<p:column headerText="correo" filterBy="#{Per.correo}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Per.correo}" />
+				</p:column>		
+		
+		
+		
+			<p:column exportable="false">
+         <p:commandButton value="eliminar" icon="pi pi-check" update="frmpersonal:dt-personal" actionListener="#{personalVista.deleteProduct(Per.idPersonal)}">      
+           </p:commandButton>
+                </p:column>	
+	 
+	
+		<p:column exportable="false">
+	
+	
+	
+	 <!-- aumento de codigo  -->
+	 
+		   	  <p:commandButton icon="pi pi-pencil" update=":frmpersonal:productDetail"
+                                 oncomplete="PF('productDialog').show()"
+                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                    <f:setPropertyActionListener value="#{Per}" target="#{personalVista.selectedPersonal}"/>                    
+              
+               <p:resetInput target=":frmpersonal:productDetail"/>
+                </p:commandButton>      
+	           </p:column>	
+	        
+       
+        <!-- aumento de codigo  -->
+        
+			</p:dataTable>
+		
+         <!-- aumento de codigo  -->
+         
+	  <p:dialog header="Personal" widgetVar="productDialog" modal="false">
+        <p:outputPanel id="productDetail" style="text-align:center;">
+               <p:column rendered="#{not empty personalVista.selectedPersonal}">
+                <div class="product">
+                    <div class="product-grid-item card" style="margin-bottom: 0">
+                        <div class="product-grid-item-top">
+                        <p:panel>
+			                <h:panelGrid columns="4" columnClasses="p-col-12 p-md-3 p-xl-2">
+               
+                <!-- aumento de caMPOS NOMBRE ID ETC ETC  -->
+                 
+       <p:outputLabel value="id"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.idPersonal}"/>                
+                 
+               <p:outputLabel value="Nombre "></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.nombre}"/>
+              
+	    <p:outputLabel value="Apellido"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.apellido}"/>
+                            
+        <p:outputLabel value="Edad"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.edad}"/>                    
+                            
+        <p:outputLabel value="Genero"></p:outputLabel>  
+                           <p:inputText value="#{personalVista.selectedPersonal.genero}"/>                 
+                                                      
+       <p:outputLabel value="Telefono"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.telefono}"/>               
+		             
+    <p:outputLabel value="Cedula"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.cedula}"/>
+                            
+       <p:outputLabel value="Cargo"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.cargo}"/>
+               
+         <p:outputLabel value="Correo"></p:outputLabel>  
+                            <p:inputText value="#{personalVista.selectedPersonal.correo}"/>
+                                     
+                                     
+                  
+                             <p:commandButton value="guardar"  icon="pi pi-check" update="frmpersonal:dt-personal"  
+                                 actionListener="#{personalVista.selectedPersonal}">   
+				                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                 class="ui-button-secondary"/>
+				               
+				                 </p:commandButton>  
+                
+                                                   
+                               </h:panelGrid>
+                               </p:panel>                                                   
+                           </div>               
+                        </div>
+                    </div>                
+            </p:column>
+        </p:outputPanel>
+    </p:dialog>    	    		       
+        
+      <!-- aumento de codigo  -->   
+        
+
+	</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

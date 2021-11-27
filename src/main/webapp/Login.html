@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+    
+        <title>login</title>
+    </h:head>
+
+
+    <h:body  
+ 
+     styleClass="containerLogin">
+<center>
+
+					<p:graphicImage width="1250px"  height="400px"
+						value="#{FacesContext.getCurrentInstance}/image/7.JPG"/>
+					
+</center>
+
+    <!-- Login Form -->
+    <form>
+      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+      <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>
+
+    <!-- Remind Passowrd -->
+    <div id="formFooter">
+      <a class="underlineHover" href="#">Forgot Password?</a>
+    </div>
+
+  </div>
+</div>
+ 
+      <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="poseidon-layout" />  
+  
+  
+
+ 
+    </h:body>
+    
+    
+
+</html>

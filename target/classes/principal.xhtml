@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+			<title>HOSPITAL Voz Andes</title>
+			
+		</f:facet>
+
+
+	</h:head>
+
+	<style>
+html * {
+	font-size: 13px !important;
+}
+
+.north {
+    background-color: green;
+    position: absolute;
+    top:0px;
+    width: 100%;
+    height: 10px;
+}
+
+</style>
+	<h:body>
+
+		<p:layout fullPage="true" styleClass="backgroundless">
+
+			<p:layoutUnit position="north" size="300" resizable="false" styleClass="north" 
+				closable="false" collapsible="false">
+
+
+				<h:panelGrid columns="4">
+					<p:graphicImage width="1550px"  height="290px"
+						value="#{FacesContext.getCurrentInstance}/image/vozandes.jpg"/>
+					<h:panelGrid cellpadding="10" width="100%">
+				<h:form>
+	
+
+	                             <p:menuButton value="HOSPITAL VozAndes">
+								<p:separator />
+								<p:menuitem value="Video Institucional" url="https://youtu.be/Kev3dgi2TdM"
+									icon="pi pi-video" />
+								<p:separator />
+								<p:menuitem value="Homepage" url="https://hospitalvozandes.com"
+									icon="pi pi-home" />
+							</p:menuButton>
+						</h:form>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+			</p:layoutUnit>
+
+		<center>
+
+					
+					<p:graphicImage width="1250px"  height="400px"
+						value="#{FacesContext.getCurrentInstance}/image/7.JPG"/>
+					
+</center>
+
+
+			<p:layoutUnit position="west" size="182" header="Menu"
+				style="border:0;" collapsible="true">
+				<p:menu toggleable="true">
+					<p:submenu label="Sistema de Control Interno" style="border:0;">
+						<p:menuitem icon="pi pi-users" value="Proveedores Farmacos" outcome="proveedor" />
+						<p:menuitem icon="fa fa-user-circle" value="Personal Administrativo" outcome="personal" />
+
+					</p:submenu>
+					<p:submenu label="Solicitudes" style="border:0;">
+							<p:menuitem icon="pi pi-plus" value="Productos Farmacos" outcome="producto" />
+						<p:menuitem icon="pi pi-user-edit" value="Pedidos Requerido" outcome="pedido" />
+							</p:submenu>
+					
+					<p:submenu label="Bodega" style="border:0;">
+						<p:menuitem icon="fa fa-database" value=" Stock Productos" outcome="compra" />
+
+					</p:submenu>
+				</p:menu>
+			</p:layoutUnit>
+
+			<p:layoutUnit position="center" size="100%">
+				<ui:insert name="content" />
+
+			</p:layoutUnit>
+
+		</p:layout>
+
+	</h:body>
+
+</f:view>
+</html>

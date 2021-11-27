@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta charset="UTF-8" />
+	<title>Productos</title>
+</h:head>
+<h:body>
+		<ui:composition template="/principal.xhtml">
+		<ui:define name="content">
+			<h:form id = "frmproducto">
+<p:growl id="growl" showDetail="true" />
+	<p:growl id="messages" showDetail="true" />
+	
+				<p:panel id="ingresoProducto" header="REGISTRO DE INGRESOS PRODUCTOS"
+			style="margin-bottom:20px">
+			
+			<div class="ui-g-12">
+				<p:staticMessage severity="error" sumary="Info!" detail="campos con(*) son obligatorios" style="width:100%"/> 
+			</div>
+			
+			
+			<h:panelGrid columns="2">	
+				
+					
+				<p:outputLabel value ="Nombre Farmaco" for="@next"></p:outputLabel>
+				<p:inputText value="#{productoVista.nombreProducto}" required="true" requiredMessage="campo vacio"></p:inputText>  
+
+				<p:outputLabel value ="Descripcion Farmaco" for="@next"></p:outputLabel>
+					<p:inputText value="#{productoVista.descripcion}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="farmaco" for="@next"></p:outputLabel>
+				      <p:selectOneMenu id="opcion" value="#{productoVista.stock}">
+             <f:selectItem itemLabel="vigente buen estado" itemValue="vigente buen estado"/>
+                    <f:selectItem itemLabel="stock faltante " itemValue="stock faltante"/>
+                   <f:selectItem itemLabel="caducado existente" itemValue="caducado existente "/>
+                    
+                    
+       			<p:inputText value="#{productoVista.stock}" required="true" requiredMessage="campo vacio"></p:inputText>
+			   </p:selectOneMenu>
+			
+						
+             <p:outputLabel value ="fechaelaboracion" for="@next"></p:outputLabel>
+				 <p:datePicker value="#{productoVista.fechaelaboracion}" showIcon="true" />
+			 
+			  <p:outputLabel value ="fechacaducidad" for="@next"></p:outputLabel>
+				 <p:datePicker value="#{productoVista.fechacaducidad}" showIcon="true"/>
+			
+	<p:outputLabel value ="Precio Producto" for="@next"></p:outputLabel>
+				<p:inputText value="#{productoVista.precio}" required="true" requiredMessage="campo vacio"></p:inputText> 
+		
+				
+	         <p:outputLabel>Proveedor</p:outputLabel>
+						<p:selectOneMenu id="option"
+						
+							value="#{productoVista.proveedorSeleccionado}">
+							<f:selectItem itemLabel="Seleccionar Proveedor" itemValue="" />
+							<f:selectItems var="proveedorselect"
+								value="#{productoVista.listaProveedor}"
+								itemLabel="#{proveedorselect.nombre} #{proveedorselect.apellido}"
+	itemValue="#{proveedorselect.idproveedor}" />
+						</p:selectOneMenu>
+
+			
+		
+		</h:panelGrid>
+			<h:panelGrid columns="2">
+			<p:commandButton value="Guardar"  update="growl dt-producto frmproducto"
+				    action="#{productoVista.insertarProducto}">
+				     </p:commandButton> 
+				     
+				   
+				      
+				     <p:commandButton value="Export" icon="pi pi-upload"
+								styleClass="ui-button-help" ajax="false">
+								<p:dataExporter type="xlsx"  target="dt-producto"
+									fileName="producto" />
+							</p:commandButton>		    
+				  </h:panelGrid>
+		</p:panel>
+
+		
+<p:dataTable id="dt-producto" widgetVar="dt-producto" var="Pro" value="#{productoVista.listaProducto}"
+                     reflow="true" styleClass="producto-table"
+                     selection="#{productoVista.selectedProducto}" rowKey="#{producto.id}" paginator="true"
+                     rows="3" rowSelectMode="add" paginatorPosition="bottom">
+            <f:facet name="header">
+                <div class="producto-table-header">
+                    <span style="font-weight: bold">PRODUCTO</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dt-producto').filter()" placeholder="buscar"/>
+                    </span>
+
+                </div>
+            </f:facet>
+		
+		
+				<p:column headerText="id" filterBy="#{Pro.idproducto}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Pro.idproducto}" />
+			</p:column>
+		
+		<p:column headerText="nombre" filterBy="#{Pro.nombreProducto}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Pro.nombreProducto}" />
+			</p:column>
+			
+			<p:column headerText="descripcion" filterBy="#{Pro.descripcion}"
+			filterStyle="diplay: none">    
+				<h:outputText value="#{Pro.descripcion}" />
+			</p:column>
+
+		<p:column headerText="stockProducto" filterBy="#{Pro.stock}"
+			filterStyle="diplay: none">    
+				<h:outputText value="#{Pro.stock}" />
+			</p:column>		
+			
+			
+	<p:column headerText="fechaelaboracion" sortBy="#{Pro.fechaelaboracion}" filterBy="#{Pro.fechaelaboracion}">
+				<h:outputText value="#{Pro.fechaelaboracion}" >
+			<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>		
+			
+			
+	<p:column headerText="fecha_caducidad" sortBy="#{Pro.fechacaducidad}" filterBy="#{Pro.fechacaducidad}">
+				<h:outputText value="#{Pro.fechacaducidad}" >
+			<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>				
+			
+			<p:column headerText="precioproducto" filterBy="#{Pro.precio}"
+			filterStyle="diplay: none">    
+				<h:outputText value="#{Pro.precio}" />
+			</p:column>
+			
+		
+					<p:column headerText="proveedor" filterBy="#{Pro.fkProveedor.nombre}"
+			filterStyle="diplay: none">    
+				<h:outputText value="#{Pro.fkProveedor.nombre}" />
+			</p:column>		
+			
+	 
+		<p:column exportable="false">
+         <p:commandButton value="eliminar" icon="pi pi-check" update="frmproducto:dt-producto" actionListener="#{productoVista.deleteProduct(Pro.idproducto)}">      
+  </p:commandButton>
+                </p:column>	
+	
+	<p:column exportable="false">
+	
+	
+	 <!-- aumento de codigo  -->
+	 
+		  <p:commandButton icon="pi pi-pencil" update=":frmproducto:productDetail"
+                                 oncomplete="PF('productDialog').show()"
+                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                    <f:setPropertyActionListener value="#{Pro}" target="#{productoVista.selectedProducto}"/>                    
+                                   <p:resetInput target=":frmproducto:productDetail"/>
+                </p:commandButton>      
+	           </p:column>	
+       
+        <!-- aumento de codigo  -->
+		
+		</p:dataTable>
+		
+         <!-- aumento de codigo  -->
+         
+         
+        <p:dialog header="Producto" widgetVar="productDialog" modal="false">
+        <p:outputPanel id="productDetail" style="text-align:center;">
+               <p:column rendered="#{not empty productoVista.selectedProducto}">
+                <div class="product">
+                    <div class="product-grid-item card" style="margin-bottom: 0">
+                        <div class="product-grid-item-top">
+                        <p:panel>
+			                <h:panelGrid columns="4" columnClasses="p-col-12 p-md-3 p-xl-2">
+               
+                <!-- aumento de caMPOS NOMBRE ID ETC ETC  -->
+                 
+             <p:outputLabel value="ID Producto"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.idproducto}"/>
+                  
+                  <p:outputLabel value="Nombre Producto"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.nombreProducto}"/>
+                       
+		          <p:outputLabel value="Descripcion Producto"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.descripcion}"/>
+                            
+                   <p:outputLabel value="stock Producto"></p:outputLabel>  
+                    <p:inputText value="#{productoVista.selectedProducto.stock}"/>          
+                     
+                    <p:outputLabel value="fechaelaboracion"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.fechaelaboracion}"/>     
+                          
+                    <p:outputLabel value="fechacaducidad"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.fechacaducidad}"/>   
+                            
+                     <p:outputLabel value="Precio Producto"></p:outputLabel>  
+                            <p:inputText value="#{productoVista.selectedProducto.precio}"/>    
+
+
+           
+                            	<p:column headerText="Editar"  filterMatchMode="contains">
+		 <p:commandButton value="Actualizar" update="growl dt-producto frmproducto"
+				    actionListener="#{productoVista.actualizarProducto(nuevoProducto)}">
+				    
+	
+
+				     </p:commandButton> 
+                        
+              
+                         </p:column>  
+                               </h:panelGrid>
+                               </p:panel>                                                   
+                           </div>               
+                        </div>
+                    </div>                
+            </p:column>
+        </p:outputPanel>
+    </p:dialog>    	    		       
+        
+      <!-- aumento de codigo  -->   
+        
+	</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

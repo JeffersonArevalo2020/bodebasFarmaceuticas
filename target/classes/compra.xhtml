@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+<meta charset="UTF-8" />
+	<title>CompraProductos</title>
+</h:head>
+<h:body>
+		<ui:composition template="/principal.xhtml">
+		<ui:define name="content">
+			<h:form id = "frmcompra">
+	<p:growl id="growl" showDetail="true" />
+	<p:growl id="messages" showDetail="true" />
+	
+		<p:panel id="ingresoCompra" header=" INGRESO DETALLE BODEGA"
+			style="margin-bottom:20px">
+		<div class="ui-g-12">
+				<p:staticMessage severity="error" sumary="Info!" detail="campos con(*) son obligatorios" style="width:100%"/> 
+			</div>
+		
+			<h:panelGrid columns="2">
+			
+				<p:outputLabel value ="Compra Productos" for="@next"></p:outputLabel>
+				<p:inputText value="#{compraVista.compraproductos}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="Detalle Pedido" for="@next"></p:outputLabel>
+				<p:inputText value="#{compraVista.detallePedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+
+				<p:outputLabel value ="Fecha Pedido"></p:outputLabel>
+          <p:datePicker value="#{compraVista.fechaPedido}" showIcon="true"/>
+
+				<p:outputLabel value ="Fecha Envio"></p:outputLabel>
+				<p:datePicker value="#{compraVista.fechaEnvio}" showIcon="true"/>
+		
+			<p:outputLabel value ="Cantidad Pedido" for="@next"></p:outputLabel>
+				<p:inputText value="#{compraVista.cantidadPedido}" required="true" requiredMessage="campo vacio"></p:inputText>
+		
+				<p:outputLabel>Personal Encargado</p:outputLabel>
+						<p:selectOneMenu id="option"
+						
+							value="#{compraVista.personalSeleccionado}">
+							<f:selectItem itemLabel="Seleccionar Personal" itemValue="" />
+							<f:selectItems var="personalselect"
+								value="#{compraVista.listaPersonal}"
+								itemLabel="#{personalselect.nombre} #{personalselect.apellido}"
+
+						itemValue="#{personalselect.idPersonal}" />
+						</p:selectOneMenu>
+			
+		</h:panelGrid>
+			<h:panelGrid columns="2">
+			<p:commandButton value="Guardar"  update="growl dt-compra frmcompra"
+				    action="#{compraVista.insertarCompra}">
+				    </p:commandButton> <p:commandButton value="Export" icon="pi pi-upload"
+								styleClass="ui-button-help" ajax="false">
+								<p:dataExporter type="xlsx"  target="dt-compra"
+									fileName="compra" />
+							</p:commandButton>		    
+			</h:panelGrid>
+		</p:panel>
+			
+
+	 <p:dataTable id="dt-compra" widgetVar="dt-compra" var="Com" value="#{compraVista.listaCompra}"
+                     reflow="true" styleClass="compra-table"
+                     selection="#{compraVista.selectedCompra}" rowKey="#{compra.id}" paginator="true"
+                     rows="3" rowSelectMode="add" paginatorPosition="bottom">
+            <f:facet name="header">
+                <div class="compra-table-header">
+                    <span style="font-weight: bold">COMPRA</span>
+
+                    <span class="filter-container ui-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dt-compra').filter()" placeholder="buscar"/>
+                    </span>
+
+                </div>
+            </f:facet>
+	
+	
+		
+			
+				<p:column headerText="id">
+				<h:outputText value="#{Com.idCompra}" />
+			</p:column>
+			
+		
+			<p:column headerText="Compra Productos" filterBy="#{Com.compraproductos}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Com.compraproductos}" />
+			</p:column>
+			
+			<p:column headerText="Detalle de Pedidos" filterBy="#{Com.detallePedido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Com.detallePedido}" />
+			</p:column>
+
+
+				<p:column headerText="Fecha Pedido" >
+					<h:outputText value="#{Com.fechaPedido}" >
+				<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>
+
+			<p:column headerText="Fecha Envio" >
+			<h:outputText value="#{Com.fechaPedido}" >
+			<f:convertDateTime pattern="dd.MM.yyyy"></f:convertDateTime>
+				</h:outputText>
+			</p:column>
+
+			
+			<p:column headerText="Cantidad" filterBy="#{Com.cantidadPedido}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Com.cantidadPedido}" />
+			</p:column>		
+			
+			<p:column headerText="Personal" filterBy="#{Com.fkPersonal.nombre}"
+			filterStyle="diplay: none">   
+				<h:outputText value="#{Com.fkPersonal.nombre}" />
+			</p:column>	
+		
+
+			
+			<p:column exportable="false">
+         <p:commandButton value="eliminar" icon="pi pi-check" update="frmcompra:dt-compra" actionListener="#{compraVista.deleteProduct(Com.idCompra)}">      
+           </p:commandButton>
+                </p:column>	
+	
+		<p:column exportable="false">
+	
+	 <!-- aumento de codigo  -->
+ 
+		  <p:commandButton icon="pi pi-pencil" update=":frmcompra:productDetail"
+                                 oncomplete="PF('productDialog').show()"
+                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                    <f:setPropertyActionListener value="#{Com}" target="#{compraVista.selectedCompra}"/>                    
+                </p:commandButton>      
+	           </p:column>	
+       
+        <!-- aumento de codigo  -->
+		
+		</p:dataTable>
+		
+         <!-- aumento de codigo  -->
+         
+         <p:dialog header="Compra" widgetVar="productDialog" modal="false">
+        <p:outputPanel id="productDetail" style="text-align:center;">
+               <p:column rendered="#{not empty compraVista.selectedCompra}">
+                <div class="product">
+                    <div class="product-grid-item card" style="margin-bottom: 0">
+                        <div class="product-grid-item-top">
+                        <p:panel>
+			                <h:panelGrid columns="4" columnClasses="p-col-12 p-md-3 p-xl-2">
+      
+               
+               <!-- aumento de caMPOS para editar NOMBRE ID ETC ETC  -->
+
+                  <p:outputLabel value="ID"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.idCompra}"/>
+                
+                  <p:outputLabel value="Compra Productos"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.compraproductos}"/>
+                
+                  <p:outputLabel value="Detalle de Pedidos"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.detallePedido}"/>
+    
+       <!-- aumento de codigo                                             
+                  <p:outputLabel value="Fecha Pedido"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.fechaPedido}"/> -->
+                          
+                      
+                  <p:outputLabel value="Cantidad Pedido"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.cantidadPedido}"/>
+                          
+                           aumento de codigo  
+       
+        <p:outputLabel value="Personal"></p:outputLabel>  
+                            <p:inputText value="#{compraVista.selectedCompra.fkPersonal}"/> 
+                            
+               
+                             
+                               <p:commandButton value="actualizar" update="growl dt-compra frmcompra"
+                         action="#{compraVista.actualizarCompra(compraVista.selectedCompra.idCompra,compraVista.selectedCompra.compraproductos, compraVista.selectedCompra.detallePedido, compraVista.selectedCompra.cantidadPedido)}">
+				                 </p:commandButton>    
+                        
+                               </h:panelGrid>
+                               </p:panel>                                                   
+                           </div>               
+                        </div>
+                    </div>                
+            </p:column>
+        </p:outputPanel>
+    </p:dialog>    	   
+    
+	</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

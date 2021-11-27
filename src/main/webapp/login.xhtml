@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+    
+        <title>login</title>
+    </h:head>
+
+
+    <h:body  
+ 
+     styleClass="containerLogin">
+    
+
+<center>
+
+					<p:graphicImage width="1250px"  height="400px"
+						value="#{FacesContext.getCurrentInstance}/image/7.JPG"/>
+					
+</center>
+
+  <center>  <div class="ui-g3">
+         <p:messages autoUpdate = "true"></p:messages>
+         <p:panel header="Inicio de Sesion" styleClass="panel-login">
+             
+             
+              <h:panelGrid id="grid" cellpadding="8" columns="6" styleClass="p-mb-7">
+                 
+               
+               
+                <div class="ui-g3" style="padding-top:30px;">
+                <h:outputLabel value="Personal Usuario" />
+         <p:inputText placeholder="Ingrese Usuario" style="width:80%"/><br/>
+                </div>
+               
+               
+                <div class="ui-g3" style="padding-top:30px;">
+                <h:outputLabel value="Personal Contaseña:" />
+                       <p:inputText placeholder="Ingrese su clave" style="width:80%"/><br/>
+                     </div>
+    
+  <h:commandButton value="limpiar" action="#{personal}"></h:commandButton>
+                  
+     <p:button id="button" value="Ingreso Sistema" outcome="principal"></p:button>
+     
+     </h:panelGrid>
+        </p:panel>
+
+            
+            <div class="ui-g-2 footer-login">
+                <span></span>
+            </div>
+        </div></center>
+  
+      
+      <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="poseidon-layout" />  
+  
+  
+
+ 
+    </h:body>
+    
+    
+
+</html>
