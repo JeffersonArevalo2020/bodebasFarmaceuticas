@@ -52,12 +52,26 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 			<artifactId>primefaces</artifactId>
 			<version>8.0</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.sonarsource.scanner.maven/sonar-maven-plugin -->
+<dependency>
+    <groupId>org.sonarsource.scanner.maven</groupId>
+    <artifactId>sonar-maven-plugin</artifactId>
+    <version>3.2</version>
+</dependency>
+		
 
 <dependency>
   <groupId>jakarta.annotation</groupId>
   <artifactId>jakarta.annotation-api</artifactId>
   <version>1.3.4</version>
   <scope>provided</scope>
+</dependency>
+
+<dependency>
+  <groupId>org.sonarsource.scanner.maven</groupId>
+ <artifactId>sonar-maven-plugin</artifactId>
+  <version>3.2</version>
 </dependency>
 
 
@@ -137,6 +151,32 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.3</version>
 			</plugin>
+			
 		</plugins>
 	</build>
-</project>
+	
+	
+	
+<profiles>
+ <profile>
+ <id>sonar</id>
+ <activation>
+<activeByDefault>true</activeByDefault>
+ </activation>
+  <properties>
+<sonar.host.url>
+ htpp://localhost:9000
+</sonar.host.url>
+  </properties>
+</profile>
+ </profiles>
+ </project>
+
+
+
+
+
+
+
+
+
